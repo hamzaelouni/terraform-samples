@@ -1,7 +1,4 @@
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
+
 #Cache folder
 .alcache/
 #Symbols folder
@@ -20,5 +17,34 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
-.idea
+
+# Terraform directories
+.terraform/
+
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate
+
+# Crash logs
+crash.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# OS / IDE
 .DS_Store
+.idea/
+.vscode/
