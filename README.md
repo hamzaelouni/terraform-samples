@@ -64,6 +64,78 @@ resource "aws_instance" "my_vpc_resource" {
 }
 ```
 
+#### Built-In Functions
+- Terraform comes pre-packaged with functions to help you transform and combine values.
+- User-defined functions **are not allowed** — only built-in ones.
+
+Built-in functions are extremely useful in making Terraform code dynamic and flexible.
+```
+variable "project-name" {
+  type    = string
+  default = "prod"
+}
+
+resource "aws_vpc" "my-vpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+        Name = join("-", ["terraform", var.project-name])}  => result is : terraform-prod
+}
+```
+
+contains(["test", "build", 1,2,3], "build") : return true because build exists in the list
+
+#### Complex Types
+
+1- **Collections**
+- Collection types allow multiple values **of one primitive type** to be grouped together
+- Constructors for these Collections include:
+  *     list(type)
+  *     map(type)
+  *     set(type)
+
+example :
+```
+variable "training" {
+  type    = list(string)
+  default = ["ACG" , "LA" ]
+}
+```
+2- **Structural**
+
+- Structural types allow multiple values of different primitive types to be grouped together
+- Constructors for these Collections include:
+    *     object(type)
+    *     tuple(type)
+    *     set(type)
+
+example:
+```
+variable "instructor" {
+  type = object({
+    name = string
+    age  = number 
+  })
+}
+```
+
+
+#### Dynamic Types - The 'any' constraint
+- `**any**` is a placeholder for a primitive type yet to be decided
+- Actual type will be determined at runtime
+
+```
+variable "data" {
+  type = list(any)
+  default = [1, 42, 7]
+}
+```
+**Even if the default value is numeric, the variable can still accept other types.**
+
+### **Dynamic blocks**
+- Dynamically constructs repeatable nested configuration blocks inside Terraform resources
+- Supported within the following block types: resource, data, provider, provisioner
+
+
 ### **Terraform commands**
 `terrafrom destory` : destroy **only** resources that exists in the state file , so if we remove a resource from the state file(using terraform state rm or manually) then execute destroy command, the resource still exist
 
@@ -71,3 +143,4 @@ resource "aws_instance" "my_vpc_resource" {
 
 `terraform state show <resource-name>` : to see details of a specific resource
 
+`terraform console` : Terraform console is an interactive REPL used to inspect state values and test Terraform expressions in real time without applying changes.
