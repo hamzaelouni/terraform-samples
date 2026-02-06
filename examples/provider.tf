@@ -8,5 +8,5 @@ provider "azurerm" {
 
 provider "aws" {
   version = "4.0"
-  region = "us-east-1"
+  region  = "us-east-1"
 }

@@ -1,9 +1,9 @@
-resource "null_resource" "test"{
+resource "null_resource" "test" {
   provisioner "local-exec" {
     command = "echo '0' > status.txt"
   }
   provisioner "local-exec" {
-    when = destroy
+    when    = destroy
     command = "echo '1' > status.txt"
   }
 }
