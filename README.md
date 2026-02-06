@@ -135,6 +135,11 @@ variable "data" {
 - Dynamically constructs repeatable nested configuration blocks inside Terraform resources
 - Supported within the following block types: resource, data, provider, provisioner
 
+### Terraform format (fmt)
+- Formats Terraform code for readability
+- Helps in keeping code consistent
+- Safe to run at any time
+- 
 
 ### **Terraform commands**
 `terrafrom destory` : destroy **only** resources that exists in the state file , so if we remove a resource from the state file(using terraform state rm or manually) then execute destroy command, the resource still exist
@@ -144,3 +149,10 @@ variable "data" {
 `terraform state show <resource-name>` : to see details of a specific resource
 
 `terraform console` : Terraform console is an interactive REPL used to inspect state values and test Terraform expressions in real time without applying changes.
+
+`terraform fmt` : formats Terraform configuration files (.tf) to follow standard HCL style. 
+
+`terraform fmt -recursive` :  format all subdirectories
+
+`terraform fmt -check` : fail if files are not formatted, it makes no changes to files it just verify if files are well formatted or not
+
