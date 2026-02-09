@@ -156,3 +156,99 @@ variable "data" {
 
 `terraform fmt -check` : fail if files are not formatted, it makes no changes to files it just verify if files are well formatted or not
 
+`terraform workspace show` : Check current workspace
+
+`terraform workspace list` : List all workspaces
+
+`terraform workspace new dev `: Create a new workspace
+
+`terraform workspace select staging` : Switch to an existing workspace
+
+`terraform workspace delete old-env` : Delete a workspace (must not be current workspace)
+
+`terraform workspace new prod` : Create and switch in one command
+
+`terraform taint` : forces a resource to be destroyed and recreated on the next apply by marking it as unhealthy in the state. it is deprecated in recent Terraform versions. It only changes the Terraform state file. It simply marks the resource as tainted in the state. Tainting a resource may cause other resources to be modified. Preferred replacement `terraform apply -replace=<resource-name>`
+
+`terraform import <resource_address> <real_resource_id>` : Reads a real, already-existing resource (created manually or by another tool), Maps it to a Terraform resource address, Writes it into terraform.tfstate. No resource is created, modified, or destroyed.
+
+**when to use terraform import :**
+
+* When you need to work with existing resources
+* if you are not allowed to create new resources
+* When you're not in control of creation process of infrastructure
+
+### Terraform configuration block
+The Terraform configuration block is the top-level terraform {} block that defines **how Terraform itself behaves, not your infrastructure.**
+
+**What goes inside the terraform {} block:**
+
+1️⃣ required_version : Controls which Terraform CLI versions are allowed.
+2️⃣ required_providers : This is mandatory in Terraform ≥ 0.13.
+3️⃣ backend : Configures remote state storage. **_Only one backend per root module._**
+
+**What does NOT go inside**
+
+❌ Resources
+❌ Variables
+❌ Providers
+❌ Outputs
+
+The terraform {} block is used only in the root module because it configures Terraform itself, including providers and backend, which are global to the workspace.
+
+example :
+```
+terraform {
+  required_version = ">= 1.6"
+
+required_providers {
+  docker = {
+     source  = "kreuzwerker/docker"
+     version = "~> 3.0"
+   }
+}
+
+backend "s3" {
+  bucket = "tf-states"
+  key    = "docker/terraform.tfstate"
+  region = "eu-west-1"
+  }
+}
+```
+
+**Terraform starts with a single workspace that is always called default. It cannot be deleted.**
+
+
+#### Using Workspaces in Configuration
+we can reference the current workspace in your Terraform code using **terraform.workspace**
+
+
+### Debugging terraform
+- TF_LOG is an environment variable for enabling verbose logging in Terraform.
+  By default, it will send logs to stderr (standard error output).
+- Can be set to the following levels: TRACE, DEBUG, INFO, WARN, ERROR. 
+  TRACE is the most verbose level of logging and the most reliable one.
+- To persist logged output, use the TF_LOG_PATH environment variable.
+- Setting logging environment variables for Terraform on Linux:
+  `export TF_LOG=TRACE | 
+   export TF_LOG_PATH=. /terraform. log`
+
+
+### Hashicorp Sentinel - Policy as Code
+- **Sentinel runs after plan, before apply.**
+- policy-as-code framework used to enforce governance, security, and compliance rules across HashiCorp products—most notably Terraform.
+- Enforces policies on your code.
+- Has its own policy language - Sentinel language
+- Designed to be approachable by non-programmers.
+- Key idea: Terraform describes **WHAT you want**. Sentinel decides **WHETHER you’re allowed to do it**.
+
+```
+terraform plan
+↓
+Terraform Cloud generates a plan
+↓
+Sentinel evaluates policies
+↓
+PASS → terraform apply allowed
+FAIL → terraform apply blocked
+```
