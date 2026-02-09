@@ -142,6 +142,9 @@ variable "data" {
 - 
 
 ### **Terraform commands**
+
+`terraform output` command is used to extract the values of output variables from the state file. this command is useful for retrieving output values.
+
 `terrafrom destory` : destroy **only** resources that exists in the state file , so if we remove a resource from the state file(using terraform state rm or manually) then execute destroy command, the resource still exist
 
 `terraform state list` :  list all resources that terraform is tracking
