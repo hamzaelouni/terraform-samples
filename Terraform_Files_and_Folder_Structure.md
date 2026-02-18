@@ -1,0 +1,1 @@
+[Terraform Files and Folder Structure](https://www.env0.com/blog/terraform-files-and-folder-structure-organizing-infrastructure-as-code)
