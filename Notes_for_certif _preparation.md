@@ -172,3 +172,9 @@ Quand tu fais : terraform apply, Terraform fait en réalité :
 6️⃣ Appliquer (destroy + create si besoin)
 
 👉 Le trigger est donc évalué avant toute action réelle.
+
+
+##### terraform.lock.hcl
+The .terraform.lock.hcl file's primary purpose is to lock the provider versions to ensure that all team members and CI/CD systems use identical versions.
+
+
