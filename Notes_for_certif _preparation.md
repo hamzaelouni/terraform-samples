@@ -241,3 +241,62 @@ The HCP Terraform private registry allows you to publish and maintain a set of c
 **`Q :`** You have configured a workspace in HCP Terraform (Cloud) to use local execution. In this mode, what does HCP Terraform do? => **`A :`** When using local execution in HCP Terraform, the platform only handles storing and syncing the workspace's state file. This means that you need to run the plan and apply commands locally on your own machine, while HCP Terraform takes care of managing the state file.
 
 ---
+Par défaut, terraform plan compare trois éléments, pas seulement deux.
+🔎 Ce que fait vraiment terraform plan
+Par défaut, Terraform fait :
+1) Cloud réel  →  met à jour le state (refresh)
+2) State       →  comparé au code (.tf)
+
+🧠 Décomposition précise
+
+**Étape 1 — Refresh**
+
+Terraform appelle le provider (AWS, Azure, GCP…)
+Il récupère l’état réel des ressources.
+
+Exemple :
+* EC2 changé manuellement
+* Security group modifié
+* Tag ajouté dans la console
+
+Il met à jour le state en mémoire.
+
+**Étape 2 — Diff configuration**
+
+Il compare :
+
+`Configuration désirée (.tf)
+VS
+State mis à jour`
+
+Et génère un plan :
+* create
+* ~ update
+* destroy
+* +/- replace
+
+
+###### ⚠️ Cas spécial : -refresh=false
+
+Si tu fais :
+```
+terraform plan -refresh=false
+```
+Alors là, terraform compare uniquement :
+
+`State (existant)  ↔  Configuration (.tf)`
+Il ne regarde pas le cloud réel.
+
+#### terraform plan change réellement le state file?
+👉 Non. terraform plan ne modifie pas réellement le state file sur disque (ou dans le remote backend).
+Quand tu fais : `terraform plan`
+Terraform :
+
+1. 🔄 Refresh le state en mémoire
+2. 📊 Calcule le diff
+3. 🧾 Affiche le plan 
+4. ❌ N’écrit rien dans le state persistant
+
+---
+
+
