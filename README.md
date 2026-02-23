@@ -149,6 +149,8 @@ variable "data" {
 
 `terraform state list` :  list all resources that terraform is tracking
 
+`terraform show [options] [file]` : use show with a path to either a Terraform **state file** or **plan file**. If you don't specify a file path, Terraform will show the latest state snapshot.
+v
 `terraform state show <resource-name>` : to see details of a specific resource
 
 `terraform console` : Terraform console is an interactive REPL used to inspect state values and test Terraform expressions in real time without applying changes.
